@@ -1,0 +1,809 @@
+{
+	"info": {
+		"_postman_id": "a1b2b307-a752-474a-8e96-ef26f6fe3a47",
+		"name": "Cats",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8993885"
+	},
+	"item": [
+		{
+			"name": "Breeds",
+			"item": [
+				{
+					"name": "Positive scenarios",
+					"item": [
+						{
+							"name": "TC01_Verify that the API is working as expected",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 200;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC01_Verify that the API is working as expected\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"current_page\", fieldValue: 1 },\r",
+											"        { fieldName: \"data\", fieldValue: !null }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue == null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/breeds?page=1",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"breeds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC02_Verify the response when the headers (optional) are unchecked",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 200;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC02_Verify the response when the headers (optional) are unchecked\",\r",
+											"    ]\r",
+											"}\r",
+											"\r",
+											"var jsonData = pm.response.json();\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/breeds?page=1",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"breeds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative scenarios",
+					"item": [
+						{
+							"name": "TC03_Verify the response using incorrect HTTP method",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 404;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC03_Verify the response using incorrect HTTP method\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"message\", fieldValue: \"Not Found\" },\r",
+											"        { fieldName: \"code\", fieldValue: 404 }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue != null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/breeds?page=1",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"breeds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC04_Verify the response using incorrect endpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 404;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC04_Verify the response using incorrect endpoint\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"message\", fieldValue: \"Not Found\" },\r",
+											"        { fieldName: \"code\", fieldValue: 404 }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue != null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/breedS?page=1",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"breedS"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC04_Verify the response when the parameter page is greater than the max no. of pages",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 200;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC04_Verify the response when the parameter page is greater than the max no. of pages\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"current_page\", fieldValue: !null },\r",
+											"        { fieldName: \"data\", fieldValue: [] }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue == null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/breeds?page=10",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"breeds"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Facts",
+			"item": [
+				{
+					"name": "Positive scenarios",
+					"item": [
+						{
+							"name": "TC01_Verify that the API for random facts is working",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 200;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC01_Verify that the API for random facts is working\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"fact\", fieldValue: \"\" },\r",
+											"        { fieldName: \"length\", fieldValue: \"\" }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue == null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/fact",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"fact"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC02_Verify that the list of facts API is working",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 200;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC02_Verify that the list of facts API is working\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"current_page\", fieldValue: \"\" },\r",
+											"        { fieldName: \"data\", fieldValue: \"\" }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue == null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/facts",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"facts"
+									],
+									"query": [
+										{
+											"key": "length",
+											"value": "145",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "3",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Negative scenarios",
+					"item": [
+						{
+							"name": "TC03_Verify the response for random facts when using incorrect method",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 404;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC03_Verify the response for random facts when using incorrect method\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"message\", fieldValue: \"Not Found\" },\r",
+											"        { fieldName: \"code\", fieldValue: 404 }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue != null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/fact",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"fact"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC03_Verify the response for list of facts when using incorrect method",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var statusCode = 404;\r",
+											"\r",
+											"var testParams = { \r",
+											"    testNames: [ \r",
+											"        \"TC03_Verify the response for list of facts when using incorrect method\",\r",
+											"    ], \r",
+											"    fields: [ \r",
+											"        { fieldName: \"message\", fieldValue: \"Not Found\" },\r",
+											"        { fieldName: \"code\", fieldValue: 404 }\r",
+											"    ] \r",
+											"};\r",
+											"\r",
+											"testParams.testNames.forEach(function findPresentFields(testName) {\r",
+											"    pm.test(testName, function () {\r",
+											"        testParams.fields.forEach(function findFields(field) {\r",
+											"            var responseObject = pm.response.json();\r",
+											"           \r",
+											"            var properties = field.fieldName.split('.');\r",
+											"\r",
+											"            for (var i=0; i<properties.length; i++){\r",
+											"                if (properties[i].split('[').length > 1){\r",
+											"                    responseObject = responseObject[properties[i].split('[')[0]][parseInt(properties[i].split('[')[1].split(']')[0])];\r",
+											"                    \r",
+											"                } else { \r",
+											"                    responseObject = responseObject[properties[i]];\r",
+											"                    \r",
+											"                }\r",
+											"            }\r",
+											"            if (field.fieldValue != null){\r",
+											"                if (Array.isArray(field.fieldValue)){\r",
+											"                    pm.expect(responseObject).to.be.oneOf(field.fieldValue);\r",
+											"                    \r",
+											"                } else if (field.fieldValue == \"<null>\"){\r",
+											"                    pm.expect(responseObject).to.eql(!null);\r",
+											"                    \r",
+											"                } else { \r",
+											"                    pm.expect(responseObject).to.eql(field.fieldValue);\r",
+											"                   \r",
+											"                }\r",
+											"            }\r",
+											"        });\r",
+											"        pm.response.to.have.status(statusCode);\r",
+											"    });\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRF-TOKEN",
+										"value": "UTLLya7NdsV4dMtEexLninBVsLzENO1Gwh9hWCsI"
+									}
+								],
+								"url": {
+									"raw": "https://catfact.ninja/facts",
+									"protocol": "https",
+									"host": [
+										"catfact",
+										"ninja"
+									],
+									"path": [
+										"facts"
+									],
+									"query": [
+										{
+											"key": "length",
+											"value": "145",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "3",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
