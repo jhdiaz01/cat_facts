@@ -1,0 +1,1 @@
+docker run -t postman/newman run "https://api.postman.com/collections/8993885-a1b2b307-a752-474a-8e96-ef26f6fe3a47?access_key=PMAT-01HVJVVJSYQQ4WY333XDD6YYZK"
